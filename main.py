@@ -18,15 +18,17 @@ import time
 import urllib2
 from os import environ
 
-from google.appengine.api import memcache
-from google.appengine.api import users
-from google.appengine.ext import ndb
+from memcache import memcache
+
+#from google.appengine.api import users
+#from google.appengine.ext import ndb
 
 from flask import Flask
 from flask import Response
 from flask import escape
 from flask import redirect
 from flask import request
+
 
 # Global variables
 
@@ -37,7 +39,7 @@ max_memcache_entries = 12
 
 # If passcode is required then without the passcode you cannot retreive the data even if you knew or
 # guessed a transmitter id. If you don't want to bother with setting a passcode then you can set this to false.
-require_passcode = True
+require_passcode = False
 
 use_geolocation = True
 
@@ -96,7 +98,10 @@ google_maps_url = "https://maps.google.com/?q="
 # Please see http://docs.mlab.com/data-api/ for instructions on how to get the key.
 
 # Set to True when in development
-master_debug = environ['SERVER_SOFTWARE'].startswith('Development')
+#master_debug = environ['SERVER_SOFTWARE'].startswith('Development')
+
+# should be in config
+master_debug = True
 
 # Output Template
 mydata = {"TransmitterId": "0", "_id": 1, "CaptureDateTime": 0, "RelativeTime": 0,
@@ -260,16 +265,20 @@ class legacy:
 		self.ti = ""
 
 
-class AdminUser(ndb.Model):
-	user = ndb.StringProperty()
+# gcloud specific
+#class AdminUser(ndb.Model):
+#	user = ndb.StringProperty()
 
 
 # Main
 
 app = Flask(__name__)
-
+# for mod_wsgi
+application = app
 
 # Front page
+# users is not functional yet
+'''
 @app.route('/')
 def hello_world():
 	user = users.get_current_user()
@@ -287,7 +296,7 @@ def hello_world():
 			return "Admin user set to: " + user.email()
 	else:
 		return "<a href=\"" + users.create_login_url() + "\">Please login</a>"
-
+'''
 
 # Prevent indexing
 @app.route('/robots.txt')
