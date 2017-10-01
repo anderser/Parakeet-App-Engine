@@ -101,7 +101,7 @@ google_maps_url = "https://maps.google.com/?q="
 #master_debug = environ['SERVER_SOFTWARE'].startswith('Development')
 
 # should be in config
-master_debug = True
+master_debug = False
 
 # Output Template
 mydata = {"TransmitterId": "0", "_id": 1, "CaptureDateTime": 0, "RelativeTime": 0,
